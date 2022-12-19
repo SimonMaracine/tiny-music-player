@@ -15,6 +15,10 @@ set(ALSOFT_INSTALL_UTILS OFF)
 set(ALSOFT_UPDATE_BUILD_VERSION OFF)
 set(LIBTYPE STATIC)  # To make static library
 
+set(wxBUILD_SHARED OFF)
+set(wxUSE_GUI ON)
+set(wxBUILD_MONOLITHIC OFF)
+
 project("tiny-music-player"
     VERSION 0.1.0
     LANGUAGES C CXX
@@ -41,7 +45,8 @@ add_subdirectory(extern/wxWidgets)
 
 target_link_libraries(${EXECUTABLE_NAME}
     OpenAL::OpenAL
-
+    wx::core
+    wx::base
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
