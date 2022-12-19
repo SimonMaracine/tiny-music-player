@@ -26,11 +26,12 @@ project("tiny-music-player"
 
 set(HEADERS
     "${CMAKE_SOURCE_DIR}/src/application.h"
+    "${CMAKE_SOURCE_DIR}/src/main_window.h"
 )
 
 add_executable(${EXECUTABLE_NAME}
-    "${CMAKE_SOURCE_DIR}/src/main.cpp"
     "${CMAKE_SOURCE_DIR}/src/application.cpp"
+    "${CMAKE_SOURCE_DIR}/src/main_window.cpp"
 )
 
 target_compile_features(${EXECUTABLE_NAME} PRIVATE cxx_std_17)
