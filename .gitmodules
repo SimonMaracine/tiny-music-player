@@ -1,0 +1,6 @@
+[submodule "extern/openal_soft"]
+	path = extern/openal_soft
+	url = https://github.com/SimonMaracine/openal-soft.git
+[submodule "extern/wxWidgets"]
+	path = extern/wxWidgets
+	url = https://github.com/wxWidgets/wxWidgets.git
