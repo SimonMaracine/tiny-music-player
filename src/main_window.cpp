@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/filedlg.h>
+#include <wx/gbsizer.h>
 #include <spdlog/spdlog.h>
 
 #include "audio/openal/source.h"
@@ -14,6 +15,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_MENU(wxID_EXIT, MainWindow::on_exit)
     EVT_MENU(wxID_ABOUT, MainWindow::on_about)
     EVT_BUTTON(30, MainWindow::on_play_pause)
+    EVT_BUTTON(40, MainWindow::on_stop)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow()
@@ -38,12 +40,15 @@ MainWindow::MainWindow()
     CreateStatusBar();
     SetStatusText("Welcome to tiny-music-player!");
 
-    sizer = new wxFlexGridSizer(2);
+    sizer = new wxGridBagSizer();
 
     btn_play_pause = new wxButton(this, 30, "Play/Pause");
+    btn_stop = new wxButton(this, 40, "Stop");
 
-    sizer->Add(btn_play_pause);
+    sizer->Add(btn_play_pause, { 0, 0 });
+    sizer->Add(btn_stop, { 0, 1 });
 
+    SetSizer(sizer);
     source = std::make_unique<al::Source>();
 }
 
@@ -52,7 +57,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_open(wxCommandEvent& event) {
-    wxFileDialog dialog = wxFileDialog(this);
+    wxFileDialog dialog = wxFileDialog {this};
     int result = dialog.ShowModal();
 
     if (result == wxID_CANCEL) {
@@ -96,6 +101,13 @@ void MainWindow::on_play_pause(wxCommandEvent& event) {
         source->continue_();
         spdlog::debug("Continuing song");
     }
+}
+
+void MainWindow::on_stop(wxCommandEvent& event) {
+    started = false;
+
+    source->stop();
+    spdlog::debug("Stopped song");
 }
 
 std::shared_ptr<al::Buffer> MainWindow::load_song(const wxString& file_path) {
