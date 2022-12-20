@@ -1,4 +1,7 @@
+#include <stdlib.h>
+
 #include <AL/alc.h>
+#include <spdlog/spdlog.h>
 
 #include "audio/context.h"
 #include "audio/openal/listener.h"
@@ -12,8 +15,8 @@ static void maybe_check_errors(ALCdevice* device) {
     const ALCenum error = alcGetError(device);
 
     if (error != ALC_NO_ERROR) {
-        // REL_CRITICAL("OpenAL Context Debug Error: {}", error);
-        // game_exit::exit_critical();
+        spdlog::critical("OpenAL Context Debug Error: {}", error);
+        exit(1);
     }
 #endif
 }
@@ -24,23 +27,23 @@ OpenAlContext::OpenAlContext() {
     device = alcOpenDevice(nullptr);
 
     if (device == nullptr) {
-        // REL_CRITICAL("Could not open an AL device, exiting...");
-        // game_exit::exit_critical();
+        spdlog::critical("Could not open an AL device, exiting...");
+        exit(1);
     }
 
     context = alcCreateContext(device, nullptr);  // TODO maybe pass some context attributes
 
     if (context == nullptr) {
-        // REL_CRITICAL("Could not create an AL context, exiting...");
-        // game_exit::exit_critical();
+        spdlog::critical("Could not create an AL context, exiting...");
+        exit(1);
     }
 
     if (alcMakeContextCurrent(context) == ALC_FALSE) {
         alcDestroyContext(context);
         alcCloseDevice(device);
 
-        // REL_CRITICAL("Could not make AL context current, exiting...");
-        // game_exit::exit_critical();
+        spdlog::critical("Could not make AL context current, exiting...");
+        exit(1);
     }
 
     _global_device = device;
@@ -48,7 +51,7 @@ OpenAlContext::OpenAlContext() {
 
     listener.set_distance_model(al::DistanceModel::InverseClamped);
 
-    // DEB_INFO("Created OpenAL device and context");
+    spdlog::info("Created OpenAL device and context");
 }
 
 OpenAlContext::~OpenAlContext() {
@@ -59,9 +62,10 @@ OpenAlContext::~OpenAlContext() {
     _global_device = nullptr;
     _global_context = nullptr;
 
-    // DEB_INFO("Destroyed OpenAL context and device");
+    spdlog::info("Destroyed OpenAL context and device");
 }
 
+// TODO not used
 void destroy_openal_context() {
     alcMakeContextCurrent(nullptr);
 

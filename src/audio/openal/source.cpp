@@ -1,4 +1,7 @@
+#include <assert.h>
+
 #include <AL/al.h>
+#include <spdlog/spdlog.h>
 
 #include "audio/openal/source.h"
 #include "audio/openal/info_and_debug.h"
@@ -13,7 +16,7 @@ namespace al {
 
         maybe_check_errors();
 
-        // DEB_DEBUG("Created AL source {}", source);
+        spdlog::debug("Created AL source {}", source);
     }
 
     Source::~Source() {
@@ -23,7 +26,7 @@ namespace al {
 
         maybe_check_errors();
 
-        // DEB_DEBUG("Deleted AL source {}", source);
+        spdlog::debug("Deleted AL source {}", source);
     }
 
     void Source::play(Buffer* buffer) {
@@ -71,7 +74,7 @@ namespace al {
     }
 
     void Source::set_gain(float gain) {
-        // ASSERT(gain >= 0.0f, "Must be positive");
+        assert(gain >= 0.0f);
 
         alSourcef(source, AL_GAIN, gain);
 
@@ -81,7 +84,7 @@ namespace al {
     }
 
     void Source::set_pitch(float pitch) {
-        // ASSERT(pitch >= 0.0f, "Must be positive");
+        assert(pitch >= 0.0f);
 
         alSourcef(source, AL_PITCH, pitch);
 

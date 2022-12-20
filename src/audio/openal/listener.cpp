@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include <AL/al.h>
 
 #include "audio/openal/listener.h"
@@ -6,7 +8,7 @@
 
 namespace al {
     void Listener::set_gain(float gain) {
-        // ASSERT(gain >= 0.0f, "Must be positive");
+        assert(gain >= 0.0f);
 
         alListenerf(AL_GAIN, gain);
 

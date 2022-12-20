@@ -1,6 +1,8 @@
 #include <memory>
+#include <stdlib.h>
 
 #include <AL/al.h>
+#include <spdlog/spdlog.h>
 
 #include "audio/openal/buffer.h"
 #include "audio/openal/info_and_debug.h"
@@ -17,8 +19,8 @@ static ALenum get_format(int channels, size_t bps) {
     } else if (channels == 2 && bps == 16) {
         format = AL_FORMAT_STEREO16;
     } else {
-        // REL_CRITICAL("Unknown format: channels = `{}`, bps = `{}`, exiting...", channels, bps);
-        // game_exit::exit_critical();
+        spdlog::critical("Unknown format: channels = `{}`, bps = `{}`, exiting...", channels, bps);
+        exit(1);
     }
 
     return format;
@@ -31,7 +33,7 @@ namespace al {
 
         maybe_check_errors();
 
-        // DEB_DEBUG("Created AL buffer {}", buffer);
+        spdlog::debug("Created AL buffer {}", buffer);
     }
 
     Buffer::Buffer(std::shared_ptr<SoundData> data) {
@@ -46,7 +48,7 @@ namespace al {
 
         maybe_check_errors();
 
-        // DEB_DEBUG("Created AL buffer {}", buffer);
+        spdlog::debug("Created AL buffer {}", buffer);
     }
 
     Buffer::~Buffer() {
@@ -61,6 +63,6 @@ namespace al {
 
         maybe_check_errors();
 
-        // DEB_DEBUG("Deleted AL buffer {}", buffer);
+        spdlog::debug("Deleted AL buffer {}", buffer);
     }
 }

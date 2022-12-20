@@ -31,7 +31,6 @@ set(HEADERS
     "${CMAKE_SOURCE_DIR}/src/audio/openal/source.h"
     "${CMAKE_SOURCE_DIR}/src/audio/context.h"
     "${CMAKE_SOURCE_DIR}/src/audio/sound_data.h"
-    "${CMAKE_SOURCE_DIR}/src/other/logging.h"
     "${CMAKE_SOURCE_DIR}/src/other/vec3.h"
     "${CMAKE_SOURCE_DIR}/src/application.h"
     "${CMAKE_SOURCE_DIR}/src/main_window.h"
@@ -52,22 +51,27 @@ add_library(stb_vorbis STATIC
     "${CMAKE_SOURCE_DIR}/dependencies/stb_vorbis/stb_vorbis.c"
 )
 
+target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra)
+
 target_compile_features(${EXECUTABLE_NAME} PRIVATE cxx_std_17)
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES CXX_EXTENSIONS OFF)
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     "${CMAKE_SOURCE_DIR}/src"
     "${CMAKE_SOURCE_DIR}/dependencies/stb_vorbis"
+    "${CMAKE_SOURCE_DIR}/extern/spdlog/include"
 )
 
 add_subdirectory(extern/openal_soft)
 add_subdirectory(extern/wxWidgets)
+add_subdirectory(extern/spdlog)
 
-target_link_libraries(${EXECUTABLE_NAME}
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     OpenAL::OpenAL
     wx::core
     wx::base
     stb_vorbis
+    spdlog
 )
 
 if(CMAKE_BUILD_TYPE MATCHES Release)

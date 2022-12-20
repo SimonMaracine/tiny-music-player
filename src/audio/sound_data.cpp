@@ -1,27 +1,28 @@
 #include <string>
 #include <string_view>
+#include <assert.h>
+#include <stdlib.h>
 
 #include <stb_vorbis.h>
+#include <spdlog/spdlog.h>
 
 #include "audio/sound_data.h"
-#include "other/logging.h"
 
-// TODO remained here
 static void check_bits_per_sample(size_t bits_per_sample, std::string_view file_path) {
     if (bits_per_sample == 8) {
-        // LOG_WARNING("bits_per_sample = 8 for sound file `{}`", file_path);
+        spdlog::warn("bits_per_sample = 8 for sound file `{}`", file_path);
     }
 }
 
 SoundData::SoundData(std::string_view file_path)
     : file_path(file_path) {
-    // DEB_DEBUG("Loading sound data `{}`...", file_path);
+    spdlog::debug("Loading sound data `{}`...", file_path);
 
     samples = stb_vorbis_decode_filename(file_path.data(), &channels, &sample_rate, &data);
 
     if (data == nullptr) {
-        // REL_CRITICAL("Could not load sound data `{}`, exiting...", file_path);
-        // game_exit::exit_critical();
+        spdlog::critical("Could not load sound data `{}`, exiting...", file_path);
+        exit(1);
     }
 
     size = compute_size();
@@ -31,11 +32,11 @@ SoundData::SoundData(std::string_view file_path)
 }
 
 SoundData::~SoundData() {
-    // ASSERT(data != nullptr, "No data");
+    assert(data != nullptr);
 
     free(data);
 
-    // DEB_DEBUG("Freed sound data `{}`", file_path);
+    spdlog::debug("Freed sound data `{}`", file_path);
 }
 
 size_t SoundData::compute_size() {
