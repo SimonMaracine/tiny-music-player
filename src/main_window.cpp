@@ -6,6 +6,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
     EVT_MENU(wxID_OPEN,   MainWindow::on_open)
     EVT_MENU(wxID_EXIT,  MainWindow::on_exit)
     EVT_MENU(wxID_ABOUT, MainWindow::on_about)
+    EVT_BUTTON(30, MainWindow::on_play_pause)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow()
@@ -29,6 +30,12 @@ MainWindow::MainWindow()
 
     CreateStatusBar();
     SetStatusText("Welcome to tiny-music-player!");
+
+    sizer = new wxFlexGridSizer(2);
+
+    btn_play_pause = new wxButton(this, 30, "Play/Pause");
+
+    sizer->Add(btn_play_pause);
 }
 
 MainWindow::~MainWindow() {
@@ -36,13 +43,18 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_open(wxCommandEvent& event) {
-
+    wxFileDialog* dialog = new wxFileDialog(this);
+    dialog->Show();
 }
 
 void MainWindow::on_exit(wxCommandEvent& event) {
-
+    wxExit();
 }
 
 void MainWindow::on_about(wxCommandEvent& event) {
+    wxMessageBox("tiny-music-player, a music player.", "About", wxOK | wxICON_INFORMATION);
+}
+
+void MainWindow::on_play_pause(wxCommandEvent& event) {
 
 }

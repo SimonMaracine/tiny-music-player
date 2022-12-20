@@ -11,5 +11,10 @@ private:
     void on_exit(wxCommandEvent& event);
     void on_about(wxCommandEvent& event);
 
+    void on_play_pause(wxCommandEvent& event);
+
     wxDECLARE_EVENT_TABLE();
+
+    wxButton* btn_play_pause = nullptr;
+    wxFlexGridSizer* sizer = nullptr;
 };
