@@ -14,6 +14,9 @@ public:
     MainWindow();
     ~MainWindow();
 private:
+    void setup_menubar();
+    void setup_widgets();
+
     void on_open(wxCommandEvent& event);
     void on_exit(wxCommandEvent& event);
     void on_about(wxCommandEvent& event);
@@ -25,9 +28,9 @@ private:
 
     wxDECLARE_EVENT_TABLE();
 
-    wxGridBagSizer* sizer = nullptr;
     wxButton* btn_play_pause = nullptr;
     wxButton* btn_stop = nullptr;
+    wxSlider* sld_track = nullptr;
 
     std::unique_ptr<al::Source> source;
     bool started = false;

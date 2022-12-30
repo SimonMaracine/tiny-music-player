@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-set(EXECUTABLE_NAME "tiny-music-player")
+set(EXECUTABLE "tiny-music-player")
 
 set(ALSOFT_UTILS OFF)
 set(ALSOFT_EXAMPLES OFF)
@@ -36,7 +36,7 @@ set(HEADERS
     "${CMAKE_SOURCE_DIR}/src/main_window.h"
 )
 
-add_executable(${EXECUTABLE_NAME}
+add_executable(${EXECUTABLE}
     "${CMAKE_SOURCE_DIR}/src/audio/openal/buffer.cpp"
     "${CMAKE_SOURCE_DIR}/src/audio/openal/info_and_debug.cpp"
     "${CMAKE_SOURCE_DIR}/src/audio/openal/listener.cpp"
@@ -51,12 +51,12 @@ add_library(stb_vorbis STATIC
     "${CMAKE_SOURCE_DIR}/dependencies/stb_vorbis/stb_vorbis.c"
 )
 
-target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra)
+target_compile_options(${EXECUTABLE} PRIVATE -Wall -Wextra)
 
-target_compile_features(${EXECUTABLE_NAME} PRIVATE cxx_std_17)
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_features(${EXECUTABLE} PRIVATE cxx_std_17)
+set_target_properties(${EXECUTABLE} PROPERTIES CXX_EXTENSIONS OFF)
 
-target_include_directories(${EXECUTABLE_NAME} PRIVATE
+target_include_directories(${EXECUTABLE} PRIVATE
     "${CMAKE_SOURCE_DIR}/src"
     "${CMAKE_SOURCE_DIR}/dependencies/stb_vorbis"
     "${CMAKE_SOURCE_DIR}/extern/spdlog/include"
@@ -66,7 +66,7 @@ add_subdirectory(extern/openal_soft)
 add_subdirectory(extern/wxWidgets)
 add_subdirectory(extern/spdlog)
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE
+target_link_libraries(${EXECUTABLE} PRIVATE
     OpenAL::OpenAL
     wx::core
     wx::base
@@ -74,10 +74,10 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     spdlog
 )
 
-if(CMAKE_BUILD_TYPE MATCHES Release)
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
     message("Building tiny-music-player in RELEASE mode")
 
-    target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
+    target_compile_definitions(${EXECUTABLE} PRIVATE
         NDEBUG
     )
 endif()
