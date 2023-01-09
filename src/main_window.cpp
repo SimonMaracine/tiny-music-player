@@ -26,6 +26,7 @@ MainWindow::MainWindow()
     SetStatusText("Welcome to tiny-music-player!");
 
     setup_widgets();
+    Center();
 
     source = std::make_unique<al::Source>();
 }
@@ -54,37 +55,52 @@ void MainWindow::setup_menubar() {
 }
 
 void MainWindow::setup_widgets() {
-    wxPanel* pnl_songs = new wxPanel(this);
-    wxPanel* pnl_current_song = new wxPanel(this);
-    wxPanel* pnl_slider_buttons = new wxPanel(this);
+    wxPanel* pnl_main = new wxPanel(this);
+    wxPanel* pnl_songs = new wxPanel(pnl_main);
+    wxPanel* pnl_current_song = new wxPanel(pnl_main);
+    wxPanel* pnl_slider_buttons = new wxPanel(pnl_main);
 
     btn_play_pause = new wxButton(pnl_slider_buttons, 30, "Play/Pause");
     btn_stop = new wxButton(pnl_slider_buttons, 40, "Stop");
     sld_track = new wxSlider(pnl_slider_buttons, 50, 10, 0, 100);
 
-    // TODO temporary
-    pnl_songs->SetBackgroundColour({ 255, 0, 0 });
-    pnl_current_song->SetBackgroundColour({ 0, 255, 0 });
-    pnl_slider_buttons->SetBackgroundColour({ 0, 0, 255 });
+    pnl_songs->SetBackgroundColour({ 170, 170, 170 });
+    pnl_current_song->SetBackgroundColour({ 128, 128, 128 });
+    pnl_slider_buttons->SetBackgroundColour({ 90, 90, 90 });
 
-    // pnl_songs->SetSize({ 100, 100 });
-    // pnl_current_song->SetSize({ 100, 100 });
+    // TODO temporary
+    pnl_main->SetBackgroundColour({ 255, 0, 0 });
 
     wxGridBagSizer* szr_main = new wxGridBagSizer;
-    szr_main->Add(pnl_songs, { 0, 0 }, wxDefaultSpan, wxEXPAND | wxALL);
-    szr_main->Add(pnl_current_song, { 1, 0 }, wxDefaultSpan, wxEXPAND | wxALL);
-    szr_main->Add(pnl_slider_buttons, { 0, 1 }, { 2, 1 }, wxEXPAND | wxALL);
+    szr_main->Add(pnl_songs, { 0, 0 }, wxDefaultSpan, wxEXPAND);
+    szr_main->Add(pnl_current_song, { 0, 1 }, wxDefaultSpan, wxEXPAND);
+    szr_main->Add(pnl_slider_buttons, { 1, 0 }, { 1, 2 }, wxEXPAND);
+
+    szr_main->AddGrowableRow(0);
+    szr_main->AddGrowableCol(0);
+    szr_main->AddGrowableCol(1);
 
     wxBoxSizer* szr_buttons = new wxBoxSizer(wxHORIZONTAL);
     szr_buttons->Add(btn_play_pause);
     szr_buttons->Add(btn_stop);
 
     wxBoxSizer* szr_slider_buttons = new wxBoxSizer(wxVERTICAL);
-    szr_slider_buttons->Add(szr_buttons);
-    szr_slider_buttons->Add(sld_track);
+    szr_slider_buttons->Add(szr_buttons, wxSizerFlags().CenterHorizontal());
+    szr_slider_buttons->Add(sld_track, wxSizerFlags().Expand().Align(wxALL));
+
+    wxBoxSizer* szr_songs = new wxBoxSizer(wxVERTICAL);
+    szr_songs->Add(new wxStaticText(pnl_songs, wxID_ANY, "Some song here.ogg"), wxSizerFlags().Expand().Align(wxALL));
+    szr_songs->Add(new wxStaticText(pnl_songs, wxID_ANY, "Some another cool song.ogg"), wxSizerFlags().Expand().Align(wxALL));
+    szr_songs->Add(new wxStaticText(pnl_songs, wxID_ANY, "Inheritance.ogg"), wxSizerFlags().Expand().Align(wxALL));
+
+    wxBoxSizer* szr_current_song = new wxBoxSizer(wxVERTICAL);
+    szr_current_song->Add(new wxStaticText(pnl_current_song, wxID_ANY, "The current song playing.ogg"), wxSizerFlags().CenterHorizontal());
+    szr_current_song->Add(new wxStaticText(pnl_current_song, wxID_ANY, "The author or something"), wxSizerFlags().CenterHorizontal());
 
     pnl_slider_buttons->SetSizer(szr_slider_buttons);
-    SetSizer(szr_main);
+    pnl_songs->SetSizer(szr_songs);
+    pnl_current_song->SetSizer(szr_current_song);
+    pnl_main->SetSizer(szr_main);
 }
 
 void MainWindow::on_open(wxCommandEvent& event) {
