@@ -14,7 +14,7 @@
 class MainWindow : public wxFrame {
 public:
     MainWindow();
-    ~MainWindow();
+    virtual ~MainWindow();
 private:
     void setup_menubar();
     void setup_widgets();
@@ -32,11 +32,12 @@ private:
     std::shared_ptr<Song> load_song(const wxString& file_path);
     void add_song_to_playlist(std::shared_ptr<Song> song);
     void select_song(std::shared_ptr<Song> song);
+
     static std::string get_name(const std::string& file_path);
 
     wxDECLARE_EVENT_TABLE();
 
-    wxGridBagSizer* szr_main = nullptr;
+    wxGridBagSizer* szr_main = nullptr;  // TODO this code needs some refactoring
 
     wxButton* btn_play_pause = nullptr;
     wxButton* btn_stop = nullptr;
@@ -50,7 +51,7 @@ private:
     std::unique_ptr<al::Source> source;
     bool started = false;
 
-    std::shared_ptr<Song> active_song = nullptr;
+    std::shared_ptr<Song> active_song;
     std::vector<std::shared_ptr<Song>> songs;
     int active_song_index = -1;
     int playing_song_index = -1;

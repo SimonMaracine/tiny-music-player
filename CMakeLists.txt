@@ -54,7 +54,11 @@ add_library(stb_vorbis STATIC
     "${CMAKE_SOURCE_DIR}/dependencies/stb_vorbis/stb_vorbis.c"
 )
 
-target_compile_options(${EXECUTABLE} PRIVATE -Wall -Wextra -Wno-deprecated-declarations)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(${EXECUTABLE} PRIVATE -Wall -Wextra -Wno-deprecated-declarations)
+else()
+    message("MSVC not tested yet")
+endif()
 
 target_compile_features(${EXECUTABLE} PRIVATE cxx_std_17)
 set_target_properties(${EXECUTABLE} PROPERTIES CXX_EXTENSIONS OFF)
