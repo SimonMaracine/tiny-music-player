@@ -23,6 +23,7 @@ wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 wxEND_EVENT_TABLE()
 
 static const char* DEFAULT_STATUS_TEXT = "Welcome to tiny-music-player!";
+static const char* DEFAULT_SONG_NAME = "No selected song";
 static constexpr int SONG_NAME_FONT_SIZE = 16;
 static constexpr int SONGS_LIST_FONT_SIZE = 12;
 static constexpr int SLIDER_SIZE = 1000;
@@ -79,7 +80,7 @@ void MainWindow::setup_widgets() {
 
     lst_songs = new wxListBox(pnl_main, 800);
     lst_songs->SetFont(songs_list_font);
-    active_song_name = new wxStaticText(pnl_current_song, wxID_ANY, "No selected song");
+    active_song_name = new wxStaticText(pnl_current_song, wxID_ANY, DEFAULT_SONG_NAME);
     active_song_name->SetFont(song_name_font);
 
     szr_main = new wxGridBagSizer;
@@ -97,6 +98,7 @@ void MainWindow::setup_widgets() {
     szr_buttons->Add(btn_stop);
 
     wxBoxSizer* szr_slider_buttons = new wxBoxSizer(wxVERTICAL);
+    szr_slider_buttons->AddSpacer(15);
     szr_slider_buttons->Add(szr_buttons, wxSizerFlags().CenterHorizontal());
     szr_slider_buttons->Add(sld_track, wxSizerFlags().Expand().Align(wxALL));
 
@@ -109,7 +111,7 @@ void MainWindow::setup_widgets() {
     pnl_main->SetSizer(szr_main);
 }
 
-void MainWindow::on_open(wxCommandEvent& event) {
+void MainWindow::on_open(wxCommandEvent&) {
     wxFileDialog dialog = wxFileDialog {this};
     const int result = dialog.ShowModal();
 
@@ -123,11 +125,11 @@ void MainWindow::on_open(wxCommandEvent& event) {
     add_song_to_playlist(song);
 }
 
-void MainWindow::on_exit(wxCommandEvent& event) {
+void MainWindow::on_exit(wxCommandEvent&) {
     wxExit();
 }
 
-void MainWindow::on_about(wxCommandEvent& event) {
+void MainWindow::on_about(wxCommandEvent&) {
     wxMessageBox(
         "tiny-music-player, a music player.\nMade with tiny experience.\nBy Simon.",
         "About",
@@ -135,8 +137,8 @@ void MainWindow::on_about(wxCommandEvent& event) {
     );
 }
 
-void MainWindow::on_playlist_clear(wxCommandEvent& event) {
-    lst_songs->Clear();
+void MainWindow::on_playlist_clear(wxCommandEvent&) {
+    lst_songs->Clear();  // TODO improve code
     songs.clear();
     active_song = nullptr;
     active_song_index = -1;
@@ -145,26 +147,27 @@ void MainWindow::on_playlist_clear(wxCommandEvent& event) {
     source->stop();
     timer.reset();
     sld_track->SetValue(0);
+    active_song_name->SetLabelText(DEFAULT_SONG_NAME);
     SetStatusText(DEFAULT_STATUS_TEXT);
 
     spdlog::debug("Cleared playlist and reset everything");
 }
 
-void MainWindow::on_play_pause(wxCommandEvent& event) {
+void MainWindow::on_play_pause(wxCommandEvent&) {
     if (active_song == nullptr) {
         return;
     }
 
+    // Play from the beginning only if not started and song index is different
     if (!started && playing_song_index != active_song_index) {
         started = true;
 
         source->play(active_song->buffer.get());
         playing_song_index = active_song_index;
+        SetStatusText("Playing song");
 
         timer = std::make_unique<SliderTimer>(sld_track, active_song, source.get());
         timer->Start(200);
-
-        SetStatusText("Playing song");
 
         spdlog::debug("Playing song");
         return;
@@ -183,7 +186,7 @@ void MainWindow::on_play_pause(wxCommandEvent& event) {
     }
 }
 
-void MainWindow::on_stop(wxCommandEvent& event) {
+void MainWindow::on_stop(wxCommandEvent&) {
     if (active_song == nullptr) {
         return;
     }
@@ -204,7 +207,7 @@ void MainWindow::on_stop(wxCommandEvent& event) {
     spdlog::debug("Stopped song");
 }
 
-void MainWindow::on_list_box_select(wxCommandEvent& event) {
+void MainWindow::on_list_box_select(wxCommandEvent&) {
     const int selection = lst_songs->GetSelection();
     select_song(songs.at(selection));
     active_song_index = selection;

@@ -9,19 +9,6 @@
 static ALCdevice* _global_device = nullptr;
 static ALCcontext* _global_context = nullptr;
 
-#if 0
-static void maybe_check_errors(ALCdevice* device) {
-#ifdef PLATFORM_GAME_DEBUG
-    const ALCenum error = alcGetError(device);
-
-    if (error != ALC_NO_ERROR) {
-        spdlog::critical("OpenAL Context Debug Error: {}", error);
-        exit(1);
-    }
-#endif
-}
-#endif
-
 OpenAlContext::OpenAlContext() {
     // Choose the default device
     device = alcOpenDevice(nullptr);
@@ -31,7 +18,7 @@ OpenAlContext::OpenAlContext() {
         exit(1);
     }
 
-    context = alcCreateContext(device, nullptr);  // TODO maybe pass some context attributes
+    context = alcCreateContext(device, nullptr);
 
     if (context == nullptr) {
         spdlog::critical("Could not create an AL context, exiting...");

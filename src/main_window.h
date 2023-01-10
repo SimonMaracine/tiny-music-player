@@ -19,15 +19,15 @@ private:
     void setup_menubar();
     void setup_widgets();
 
-    void on_open(wxCommandEvent& event);
-    void on_exit(wxCommandEvent& event);
-    void on_about(wxCommandEvent& event);
-    void on_playlist_clear(wxCommandEvent& event);
+    void on_open(wxCommandEvent&);
+    void on_exit(wxCommandEvent&);
+    void on_about(wxCommandEvent&);
+    void on_playlist_clear(wxCommandEvent&);
 
-    void on_play_pause(wxCommandEvent& event);
-    void on_stop(wxCommandEvent& event);
+    void on_play_pause(wxCommandEvent&);
+    void on_stop(wxCommandEvent&);
 
-    void on_list_box_select(wxCommandEvent& event);
+    void on_list_box_select(wxCommandEvent&);
 
     std::shared_ptr<Song> load_song(const wxString& file_path);
     void add_song_to_playlist(std::shared_ptr<Song> song);
