@@ -34,6 +34,8 @@ set(HEADERS
     "${CMAKE_SOURCE_DIR}/src/other/vec3.h"
     "${CMAKE_SOURCE_DIR}/src/application.h"
     "${CMAKE_SOURCE_DIR}/src/main_window.h"
+    "${CMAKE_SOURCE_DIR}/src/slider_timer.h"
+    "${CMAKE_SOURCE_DIR}/src/song.h"
 )
 
 add_executable(${EXECUTABLE}
@@ -45,6 +47,7 @@ add_executable(${EXECUTABLE}
     "${CMAKE_SOURCE_DIR}/src/audio/sound_data.cpp"
     "${CMAKE_SOURCE_DIR}/src/application.cpp"
     "${CMAKE_SOURCE_DIR}/src/main_window.cpp"
+    "${CMAKE_SOURCE_DIR}/src/slider_timer.cpp"
 )
 
 add_library(stb_vorbis STATIC

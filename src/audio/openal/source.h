@@ -32,6 +32,7 @@ namespace al {
         float get_max_distance() { return max_distance; }
 
         bool is_playing();
+        int sample_offset();
 
         void set_gain(float gain);
         void set_pitch(float pitch);

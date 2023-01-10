@@ -73,6 +73,15 @@ namespace al {
         return state == AL_PLAYING;
     }
 
+    int Source::sample_offset() {
+        int offset;
+        alGetSourcei(source, AL_SAMPLE_OFFSET, &offset);
+
+        maybe_check_errors();
+
+        return offset;
+    }
+
     void Source::set_gain(float gain) {
         assert(gain >= 0.0f);
 
